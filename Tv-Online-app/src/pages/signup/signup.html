@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'SIGNUP_TITLE' | translate }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <form [formGroup]="signupForm" (submit)="doSignup()" novalidate>
+    <ion-item>
+      <ion-input type="text" placeholder="Digte seu nome"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input formControlName="password" type="password" placeholder="Digite seu e-mail" [class.invalid]="!signupForm.controls.password.valid"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input formControlName="password" type="password" placeholder="Digite sua senha" [class.invalid]="!signupForm.controls.password.valid"></ion-input>
+    </ion-item>
+    <div padding>
+      <button ion-button color="primary" block>{{ 'SIGNUP_BUTTON' | translate }}</button>
+    </div>
+  </form>
+</ion-content>
