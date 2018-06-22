@@ -8,18 +8,18 @@
 
 
 <ion-content>
-  <form [formGroup]="signupForm" (submit)="doSignup()" novalidate>
+  <form [formGroup]="signupForm" (submit)="doSignup()">
     <ion-item>
-      <ion-input type="text" placeholder="Digte seu nome"></ion-input>
+      <ion-input formControlName="name" type="text" placeholder="Digte seu nome"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input formControlName="password" type="password" placeholder="Digite seu e-mail" [class.invalid]="!signupForm.controls.password.valid"></ion-input>
+      <ion-input formControlName="email" type="email" placeholder="Digite seu e-mail"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input formControlName="password" type="password" placeholder="Digite sua senha" [class.invalid]="!signupForm.controls.password.valid"></ion-input>
+      <ion-input formControlName="password" type="password" placeholder="Digite sua senha"></ion-input>
     </ion-item>
     <div padding>
-      <button ion-button color="primary" block>{{ 'SIGNUP_BUTTON' | translate }}</button>
+      <button ion-button color="primary"  type="submit" [disabled]="!signupForm.valid" block>{{ 'SIGNUP_BUTTON' | translate }}</button>
     </div>
   </form>
 </ion-content>

@@ -1,4 +1,2 @@
-export { Api } from './api/api';
-export { Items } from '../mocks/providers/items';
-export { Settings } from './settings/settings';
+export { CanalProvider } from './canal/canal';
 export { User } from './user/user';

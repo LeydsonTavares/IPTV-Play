@@ -4,32 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { IonicStorageModule, Storage } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { AngularFireAuthModule  } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
+import { StreamingMedia } from '@ionic-native/streaming-media';
 
 
-import { Items } from '../mocks/providers/items';
-import { Settings, User, Api } from '../providers';
+import { User,CanalProvider } from '../providers';
 import { MyApp } from './app.component';
 
-// The translate loader needs to know where to load i18n files
-// in Ionic's static asset pipeline.
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
-
-export function provideSettings(storage: Storage) {
-
-  return new Settings(storage, {
-    option1: true,
-    option2: 'Ionitron J. Framework',
-    option3: '3',
-    option4: 'Hello'
-  });
 }
 
 export const firebaseConfig = {
@@ -55,25 +44,21 @@ export const firebaseConfig = {
         deps: [HttpClient]
       }
     }),
-    IonicModule.forRoot(MyApp, {preloadModules: true}),
+    IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
+  entryComponents: [MyApp],
   providers: [
-    Api,
-    Items,
     User,
     Camera,
     SplashScreen,
     StatusBar,
-    { provide: Settings, useFactory: provideSettings, deps: [Storage] },
-
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    StreamingMedia,
+    CanalProvider
   ]
 })
 export class AppModule { }

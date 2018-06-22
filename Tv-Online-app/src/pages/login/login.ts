@@ -41,7 +41,12 @@ export class LoginPage {
 
   doLogin(): void {
     if (!this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      let toast = this.toastCtrl.create({
+        message: this.loginErrorString,
+        duration: 3000,
+        position: 'top'
+      });
+      toast.present();
     } else {
       this.user.login(this.loginForm.value.email,
         this.loginForm.value.password).then((resp) => {

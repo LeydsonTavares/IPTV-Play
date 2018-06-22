@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
 import { FirstRunPage } from '../pages';
-import { Settings } from '../providers';
 import { timer } from 'rxjs/observable/timer';
 
 @Component({
@@ -22,7 +21,7 @@ export class MyApp {
     { title: 'Master Detail', component: 'ListMasterPage' },
   ]
 
-  constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar) {
+  constructor(private translate: TranslateService, platform: Platform, private config: Config, private statusBar: StatusBar) {
     platform.ready().then(() => {
       timer(3000).subscribe(() => this.splash = false)
       this.statusBar.styleDefault();

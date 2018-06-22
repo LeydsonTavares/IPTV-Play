@@ -8,12 +8,12 @@
 
 
 <ion-content>
-  <form [formGroup]="loginForm" (submit)="doLogin()" novalidate>
+  <form [formGroup]="loginForm" (submit)="doLogin()">
     <ion-item>
-      <ion-input formControlName="email" type="email" placeholder="Digite seu e-mail" [class.invalid]="!loginForm.controls.email.valid"></ion-input>
+      <ion-input formControlName="email" type="email" placeholder="Digite seu e-mail"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input formControlName="password" type="password" placeholder="Digite sua senha" [class.invalid]="!loginForm.controls.password.valid"></ion-input>
+      <ion-input formControlName="password" type="password" placeholder="Digite sua senha"></ion-input>
     </ion-item>
     <div padding>
       <button ion-button color="primary" block [disabled]="!loginForm.valid">{{ 'LOGIN_BUTTON' | translate }}</button>

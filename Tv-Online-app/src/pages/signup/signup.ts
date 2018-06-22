@@ -30,18 +30,23 @@ export class SignupPage {
       this.signupErrorString = value;
     });
     this.signupForm = formBuilder.group({
-      email: ['',
-        Validators.compose([Validators.required, EmailValidator.isValid])],
-      password: ['',
-        Validators.compose([Validators.minLength(6), Validators.required])]
+      name: ['', Validators.required],
+      email: ['',Validators.compose([Validators.required, EmailValidator.isValid])],
+      password: ['',Validators.compose([Validators.minLength(6), Validators.required])]
     });
   }
 
   doSignup() {
     if (!this.signupForm.valid) {
-      console.log(this.signupForm.value);
+      let toast = this.toastCtrl.create({
+        message: this.signupErrorString,
+        duration: 3000,
+        position: 'top'
+      });
+
+      toast.present();
     } else {
-      this.user.signup(this.signupForm.value.email, this.signupForm.value.passwor).then((resp) => {
+      this.user.signup(this.signupForm.value.email, this.signupForm.value.password).then((resp) => {
         this.loading.dismiss().then(() => {
           this.navCtrl.push(LoginPage);
         });

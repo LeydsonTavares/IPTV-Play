@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController } from 'ionic-angular';
+import { IonicPage, ModalController, NavController,AlertController } from 'ionic-angular';
+import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 
-import { Item } from '../../models/item';
-import { Items } from '../../providers';
+
+import { Canal } from './../../models/canal';
+import { CanalProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -10,45 +12,62 @@ import { Items } from '../../providers';
   templateUrl: 'list-master.html'
 })
 export class ListMasterPage {
-  currentItems: Item[];
+  listCanais: Canal[] = [];
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
-    this.currentItems = this.items.query();
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController,public canalProvider: CanalProvider,public alertCtrl: AlertController, public streamingMedia: StreamingMedia) {
+    this.findAllCanais();
   }
 
-  /**
-   * The view loaded, let's query our items for the list
-   */
-  ionViewDidLoad() {
+ 
+  findAllCanais() {
+    this.canalProvider.findAll()
+      .subscribe(response => {
+        this.listCanais = response;
+        console.log("Canais", this.listCanais);
+      },
+        error => {
+          let alert = this.alertCtrl.create({
+            title: 'Que pena!',
+            message: 'A comunicação com o servidor falhou, verifique sua conexão e tente novamente',
+            enableBackdropDismiss: false,
+            buttons: [
+              {
+                text: 'Tentar novamente',
+                handler: () => {
+                  this.findAllCanais();
+                }
+              }
+            ]
+          });
+          alert.present();
+        });
   }
 
-  /**
-   * Prompt the user to add a new item. This shows our ItemCreatePage in a
-   * modal and then adds the new item to our data source if the user created one.
-   */
-  addItem() {
-    let addModal = this.modalCtrl.create('ItemCreatePage');
-    addModal.onDidDismiss(item => {
-      if (item) {
-        this.items.add(item);
-      }
-    })
-    addModal.present();
+  itemTapped(event, canal) {
+    let options: StreamingVideoOptions = {
+      successCallback: () => { console.log('Video played') },
+      errorCallback: (e) => { console.log('Error streaming') },
+      orientation: 'landscape'
+    };
+    
+    this.streamingMedia.playVideo(canal.iptv, options);
+
   }
 
-  /**
-   * Delete an item from the list of items.
-   */
-  deleteItem(item) {
-    this.items.delete(item);
+  getItems(ev: any) {
+    let val = ev.target.value;
+
+    if (val && val.trim() != '') {
+      this.listCanais = this.listCanais.filter((canal) => {
+        return (canal.nome.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    } else {
+      this.findAllCanais();
+    }
   }
 
-  /**
-   * Navigate to the detail page for this item.
-   */
-  openItem(item: Item) {
-    // this.navCtrl.push('ItemDetailPage', {
-    //   item: item
-    // });
-  }
+
+
+
+
 }

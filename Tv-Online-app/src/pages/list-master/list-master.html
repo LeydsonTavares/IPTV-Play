@@ -1,34 +1,18 @@
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>{{ 'LIST_MASTER_TITLE' | translate }}</ion-title>
-  </ion-navbar>
-
+<ion-header no-border>
+  <ion-toolbar color="light">
+    <ion-segment>
+      <img src="assets/img/logo.png" width="40px" height="40px"/>
+      <ion-searchbar style="width: 95%" autocomplete="on" animated="true" autocorrect="on" placeholder="Pesquisar..." (ionInput)="getItems($event)">
+      </ion-searchbar>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
-    <div *ngIf="currentItems.length">
-      <ion-item-sliding *ngFor="let item of currentItems">
-        <!-- <button ion-item (click)="openItem(item)">
-        <ion-avatar item-start>
-          <img [src]="item.profilePic" />
-        </ion-avatar>
-        <h2>{{item.name}}</h2>
-        <p>{{item.about}}</p>
-        <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
-        </button> -->
-
-        <ion-item-options>
-          <button ion-button color="danger" (click)="deleteItem(item)">
-            {{ 'DELETE_BUTTON' | translate }}
+    <ion-list padding>
+          <button ion-item *ngFor="let canal of listCanais" (click)="itemTapped($event, canal)" class="item-md">
+              {{canal.nome}}
+            <ion-icon md="md-arrow-forward" item-end></ion-icon>
           </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </div>
-  </ion-list>
-  <div text-center *ngIf="!currentItems.length">
-      <h5 ion-text>Nenhum canal encontrado!</h5>   
-    </div>
+      </ion-list>
 </ion-content>
