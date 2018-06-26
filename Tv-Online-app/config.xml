@@ -90,4 +90,5 @@
     <engine name="android" spec="~7.0.0" />
     <allow-navigation href="http://192.168.25.175:8100" />
     <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
+    <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
 </widget>

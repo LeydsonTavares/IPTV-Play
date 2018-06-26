@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import { MainPage } from '..';
 
 /**
  * The Welcome Page is a splash page that quickly describes the app,
@@ -14,13 +16,25 @@ import { IonicPage, NavController } from 'ionic-angular';
 })
 export class WelcomePage {
 
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController, public storage: Storage) {
+  }
+
+
 
   login() {
-    this.navCtrl.push('LoginPage');
+
+    this.storage.get('EMAIL').then((data) => {
+      if(!data){
+        this.navCtrl.push('LoginPage');
+      }
+      else {
+        this.navCtrl.push(MainPage);
+      }
+    });
   }
 
   signup() {
     this.navCtrl.push('SignupPage');
   }
+
 }

@@ -18,5 +18,9 @@
     <div padding>
       <button ion-button color="primary" block [disabled]="!loginForm.valid">{{ 'LOGIN_BUTTON' | translate }}</button>
     </div>
+    <ion-item>
+      <ion-label>Continuar conectado</ion-label>      
+      <ion-checkbox formControlName="loadingStorage"  type="checkbox" [disabled]="!loginForm.valid" (ionChange)="updateStorage()"></ion-checkbox>
+    </ion-item>
   </form>
 </ion-content>

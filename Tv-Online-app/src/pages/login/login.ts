@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, Loading, NavController, ToastController, LoadingController } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
+import { Storage } from '@ionic/storage';
 
 import { User } from '../../providers';
 import { MainPage } from '..';
@@ -20,8 +21,12 @@ export class LoginPage {
   public loginForm: FormGroup;
   public loading: Loading;
 
+
+
+
   constructor(public navCtrl: NavController,
     public user: User,
+    public storage: Storage,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
@@ -34,8 +39,24 @@ export class LoginPage {
       email: ['',
         Validators.compose([Validators.required, EmailValidator.isValid])],
       password: ['',
-        Validators.compose([Validators.minLength(6), Validators.required])]
+        Validators.compose([Validators.minLength(6), Validators.required])],
+      loadingStorage: [false,]
     });
+  }
+
+
+
+
+  updateStorage() {
+    if (this.loginForm.value.loadingStorage != undefined) {
+      if (this.loginForm.value.loadingStorage) {
+        this.storage.set('EMAIL', this.loginForm.value.email);
+        this.storage.set('PASSWORD', this.loginForm.value.password);
+      }
+      else {
+        this.storage.clear();
+      }
+    }
   }
 
 

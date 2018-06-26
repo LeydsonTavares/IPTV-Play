@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController,AlertController } from 'ionic-angular';
+import { IonicPage, ModalController, NavController, AlertController, ToastController } from 'ionic-angular';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
+import { Storage } from '@ionic/storage';
 
 
 import { Canal } from './../../models/canal';
 import { CanalProvider } from '../../providers';
+import { User } from '../../providers';
+import { FirstRunPage } from '..';
 
 @IonicPage()
 @Component({
@@ -14,27 +17,43 @@ import { CanalProvider } from '../../providers';
 export class ListMasterPage {
   listCanais: Canal[] = [];
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController,public canalProvider: CanalProvider,public alertCtrl: AlertController, public streamingMedia: StreamingMedia) {
+  constructor(public navCtrl: NavController,
+    public storage: Storage,
+    public user: User,
+    public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
+    public canalProvider: CanalProvider,
+    public alertCtrl: AlertController,
+    public streamingMedia: StreamingMedia) {
     this.findAllCanais();
   }
 
- 
+
   findAllCanais() {
     this.canalProvider.findAll()
       .subscribe(response => {
         this.listCanais = response;
-        console.log("Canais", this.listCanais);
+        this.storage.set("CANAIS", response);
       },
         error => {
           let alert = this.alertCtrl.create({
             title: 'Que pena!',
-            message: 'A comunicação com o servidor falhou, verifique sua conexão e tente novamente',
+            message: 'A comunicação com o servidor falhou, verifique sua Lista Off-line',
             enableBackdropDismiss: false,
             buttons: [
               {
-                text: 'Tentar novamente',
+                text: 'Lista Off-line?',
                 handler: () => {
-                  this.findAllCanais();
+                  this.storage.get('CANAIS').then((data) => {
+                    console.log("Data", data);
+                    this.listCanais = data;
+                    let toast = this.toastCtrl.create({
+                      message: 'Lista de Canais Off-line!',
+                      duration: 3000,
+                      position: 'top'
+                    });
+                    toast.present();
+                  });
                 }
               }
             ]
@@ -49,7 +68,7 @@ export class ListMasterPage {
       errorCallback: (e) => { console.log('Error streaming') },
       orientation: 'landscape'
     };
-    
+
     this.streamingMedia.playVideo(canal.iptv, options);
 
   }
@@ -66,8 +85,9 @@ export class ListMasterPage {
     }
   }
 
-
-
-
-
+  doLogout() {
+    this.user.logout();
+    this.navCtrl.push(FirstRunPage);
+    this.storage.clear();
+  }
 }
